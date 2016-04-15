@@ -28,16 +28,25 @@
                 android:layout_height="match_parent"
                 android:id="@+id/surfaceView"
                 android:layout_centerHorizontal="true"
-                android:padding="0dp" />
+                android:padding="0dp"
+                android:background="#ffffff" />
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/enteredLettersBar">
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/enteredLettersRow"
+                    android:layout_margin="0dp"
+                    android:layout_weight="0"
+                    android:gravity="center_horizontal">
 
-            </LinearLayout>
+                </TableRow>
+            </TableLayout>
 
 
         </RelativeLayout>
@@ -67,7 +76,8 @@
                     android:layout_height="wrap_content"
                     android:text="New Text"
                     android:id="@+id/playersTextView"
-                    android:background="#57c9ff" />
+                    android:background="#fff75a"
+                    android:padding="5dp" />
             </ScrollView>
         </RelativeLayout>
 
