@@ -7,8 +7,8 @@ public class GameManager {
     private static GameManager ourInstance = new GameManager();
 
     private IAssetManager assetManager;
-    private IServerHandler serverHandler;
-    private IController gameController;
+    private ServerHandler serverHandler;
+    private Controller gameController;
 
     public static GameManager getInstance() {
         return ourInstance;
@@ -27,20 +27,19 @@ public class GameManager {
         this.assetManager = assetManager;
     }
 
-
-    public IServerHandler getServerHandler() {
+    public ServerHandler getServerHandler() {
         return serverHandler;
     }
 
-    public void setServerHandler(IServerHandler serverHandler) {
+    public void setServerHandler(ServerHandler serverHandler) {
         this.serverHandler = serverHandler;
     }
 
-    public IController getGameController() {
+    public Controller getGameController() {
         return gameController;
     }
 
-    public void setGameController(IController gameController) {
+    public void setGameController(Controller gameController) {
         this.gameController = gameController;
     }
 }
