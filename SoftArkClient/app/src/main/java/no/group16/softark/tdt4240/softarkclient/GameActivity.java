@@ -8,8 +8,9 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
-
         getSupportActionBar().hide();
+        GameView gameView = new GameView(this);
+        setContentView(gameView);
+
     }
 }
