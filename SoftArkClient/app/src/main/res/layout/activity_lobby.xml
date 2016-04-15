@@ -31,6 +31,5 @@
         android:text="@string/joingame_btntxt"
         android:id="@+id/button3"
         android:layout_below="@+id/yourNameText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
