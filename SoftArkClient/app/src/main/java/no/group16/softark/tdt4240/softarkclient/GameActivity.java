@@ -2,6 +2,7 @@ package no.group16.softark.tdt4240.softarkclient;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.SurfaceView;
 import android.view.View;
 
 import org.json.JSONException;

@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
 public interface IRenderer {
     public void onUpdate();
     public void onRender();
-    public void setTouchEventListener(TouchInputEvent listener);
+    public void setDrawerListener(View.OnTouchListener listener);
     public void addPath(DrawingPath drawingPath);
 
 }

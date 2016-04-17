@@ -3,6 +3,8 @@ package no.group16.softark.tdt4240.softarkclient;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -134,19 +136,30 @@ public abstract class ServerHandler   {
                     final IReceiver rec = r;
                     final JSONObject jsonFinal = json;
 
-                    ((Activity)rec).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                rec.onReceive(jsonFinal);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                    if(rec instanceof GameController) {
+                        RelativeLayout view = (RelativeLayout)((GameView)((GameController)rec).getGameView());
+                        view.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    rec.onReceive(jsonFinal);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                    });
-
-
-
+                        });
+                    } else if(rec instanceof Activity) {
+                        ((Activity)rec).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    rec.onReceive(jsonFinal);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
                 }
             }
 

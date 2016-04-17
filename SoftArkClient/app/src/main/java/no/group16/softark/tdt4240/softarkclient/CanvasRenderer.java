@@ -1,7 +1,9 @@
 package no.group16.softark.tdt4240.softarkclient;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -16,22 +18,14 @@ import java.util.concurrent.Callable;
 /**
  * Created by tien on 4/14/2016.
  */
-public class CanvasRenderer extends SurfaceView implements IRenderer {
+public class CanvasRenderer implements IRenderer {
 
-    private TouchInputEvent touchEvent;
     private ArrayList<DrawingPath> drawingPaths = new ArrayList<DrawingPath>();
     private Paint paint = new Paint();
+    SurfaceView surfaceView;
 
-    public CanvasRenderer(Context context) {
-        super(context);
-    }
-
-    public CanvasRenderer(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public CanvasRenderer(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public CanvasRenderer(View context) {
+        this.surfaceView = (SurfaceView)(context).findViewById(R.id.surfaceView);
     }
 
     @Override
@@ -39,33 +33,19 @@ public class CanvasRenderer extends SurfaceView implements IRenderer {
 
     }
 
+
     @Override
     public void onRender() {
-        invalidate();
-    }
+        Canvas canvas = surfaceView.getHolder().lockCanvas();
 
-    @Override
-    public void setTouchEventListener(TouchInputEvent listener) {
-        this.touchEvent = listener;
-    }
+        paint.setDither(true);
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setStrokeWidth(3);
 
-    @Override
-    public void addPath(DrawingPath drawingPath) {
-        drawingPaths.add(drawingPath);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        this.touchEvent.onTouchInputEvent(new Point((int)event.getX(), (int)event.getY()), event.getAction());
-
-        return true;
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        for(DrawingPath drawingPath : drawingPaths) {
+        /*for(DrawingPath drawingPath : drawingPaths) {
             Path path = new Path();
 
             for(int i = 0; i < drawingPath.points.size(); i++) {
@@ -80,7 +60,20 @@ public class CanvasRenderer extends SurfaceView implements IRenderer {
 
             canvas.drawPath(path, paint);
         }
+        surfaceView.getHolder().unlockCanvasAndPost(canvas);*/
+
+        canvas.drawRect(50, 50, 200, 200, paint);
+        surfaceView.getHolder().unlockCanvasAndPost(canvas);
     }
 
+    @Override
+    public void setDrawerListener(View.OnTouchListener listener) {
+        surfaceView.setOnTouchListener(listener);
+    }
+
+    @Override
+    public void addPath(DrawingPath drawingPath) {
+        drawingPaths.add(drawingPath);
+    }
 
 }

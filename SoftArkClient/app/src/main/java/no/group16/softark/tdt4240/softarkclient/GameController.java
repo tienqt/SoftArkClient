@@ -20,6 +20,8 @@ import java.util.ArrayList;
  */
 public class GameController extends Controller implements IReceiver {
 
+    ArrayList<Point> tmpPath = new ArrayList<Point>();
+
     public GameController(Context context){
         super(context);
 
@@ -58,6 +60,7 @@ public class GameController extends Controller implements IReceiver {
         GameManager.getInstance().getServerHandler().registerListener("gameOverNotification", this);
         GameManager.getInstance().getServerHandler().registerListener("newPathDrawn", this);
 
+        /*
         gameView.getRenderer().setTouchEventListener(new TouchInputEvent() {
             @Override
             public void onTouchInputEvent(Point point, int action) {
@@ -76,6 +79,33 @@ public class GameController extends Controller implements IReceiver {
                         tmpPath.clear();
                         break;
                 }
+            }
+        });*/
+    }
+
+
+    @Override
+    public void onInit() {
+
+        gameView.setDrawListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:       // TODO: create generic "types"
+                        tmpPath.clear();
+                        tmpPath.add(new Point((int)event.getX(), (int)event.getY()));
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        tmpPath.add(new Point((int)event.getX(), (int)event.getY()));
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        DrawingPath dp = new DrawingPath(tmpPath, "", ""); //TODO
+                        handleNewPathByUser(dp);
+
+                        tmpPath.clear();
+                        break;
+                }
+                return true;
             }
         });
     }
@@ -97,8 +127,8 @@ public class GameController extends Controller implements IReceiver {
     @Override
     public void handleNewPathByServer(JSONObject json) throws JSONException {
 
-            String toolId = json.getString("drawingTool");
-            String colorId = json.getString("color");
+            //String toolId = json.getString("drawingTool");
+            //String colorId = json.getString("color");
             JSONArray points = json.getJSONArray("points");
             ArrayList<Point> pointList = new ArrayList<>();
 
@@ -108,9 +138,10 @@ public class GameController extends Controller implements IReceiver {
                 pointList.add(new Point(x, y));
             }
 
-            DrawingPath drawingPath = new DrawingPath(pointList, toolId, colorId);
-
+            DrawingPath drawingPath = new DrawingPath(pointList, "", "");
             gameLogic.addPath(drawingPath);
+
+            gameView.getRenderer().addPath(drawingPath);
             gameView.getRenderer().onUpdate();
             gameView.getRenderer().onRender();
 
@@ -120,9 +151,20 @@ public class GameController extends Controller implements IReceiver {
     protected void handleNewPathByUser(DrawingPath drawingPath) {
         gameLogic.addPath(drawingPath);
         gameView.getRenderer().onUpdate();
-        gameView.getRenderer().onRender();
+        //gameView.getRenderer().onRender();
 
-        JSONArray jsonPoints = new JSONArray(drawingPath.points);
+        JSONArray jsonPoints = new JSONArray();
+        for(int i = 0; i < drawingPath.points.size(); i++) {
+            JSONObject pt = new JSONObject();
+            try {
+                pt.put("x", drawingPath.points.get(i).x);
+                pt.put("y", drawingPath.points.get(i).y);
+                jsonPoints.put(pt);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         JSONObject msg = new JSONObject();
         try {
             msg.put("type", "newPathDrawn");
@@ -162,6 +204,6 @@ public class GameController extends Controller implements IReceiver {
         }
     }
 
-    ArrayList<Point> tmpPath = new ArrayList<Point>();
+
 
 }

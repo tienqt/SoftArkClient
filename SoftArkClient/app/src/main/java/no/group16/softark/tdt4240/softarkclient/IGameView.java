@@ -11,5 +11,5 @@ public interface IGameView {
     public void moveLetterBtn(android.view.View v, final int MAX_CHAR_PER_ROW);
     public IRenderer getRenderer();
     public void updatePlayerListTextView(String txt);
-    public void setOnTouchListener(View.OnTouchListener touchListener);
+    public void setDrawListener(View.OnTouchListener touchListener);
 }

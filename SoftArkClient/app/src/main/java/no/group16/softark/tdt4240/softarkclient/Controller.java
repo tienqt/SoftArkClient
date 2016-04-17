@@ -2,6 +2,7 @@ package no.group16.softark.tdt4240.softarkclient;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.view.SurfaceView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,9 +18,10 @@ public abstract class Controller {
     protected ServerHandler serverHandler;
 
     protected Controller(Context context){
-        gameView = new GameView(context);
+        gameView =  new GameView(context);
         gameLogic = new GameLogic();
         serverHandler = GameManager.getInstance().getServerHandler();
+        onInit();
 
     }
 
@@ -52,6 +54,8 @@ public abstract class Controller {
     public void setServerHandler(ServerHandler serverHandler) {
         this.serverHandler = serverHandler;
     }
+
+    abstract public void onInit();
 
 
 }

@@ -3,6 +3,8 @@ package no.group16.softark.tdt4240.softarkclient;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
+import android.view.SurfaceView;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
@@ -35,7 +37,7 @@ public class GameView extends RelativeLayout implements IGameView {
 
         playerListTextView = (TextView)findViewById(R.id.playersTextView);
 
-        renderer = new CanvasRenderer(context);
+        renderer = new CanvasRenderer(this);
     }
 
 
@@ -151,4 +153,11 @@ public class GameView extends RelativeLayout implements IGameView {
     public void updatePlayerListTextView(String txt){
         this.playerListTextView.setText(txt);
     }
+
+    @Override
+    public void setDrawListener(OnTouchListener touchListener) {
+        renderer.setDrawerListener(touchListener);
+    }
+
+
 }
