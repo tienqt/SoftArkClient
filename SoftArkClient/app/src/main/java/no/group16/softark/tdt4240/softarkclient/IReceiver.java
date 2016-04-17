@@ -1,5 +1,6 @@
 package no.group16.softark.tdt4240.softarkclient;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -7,6 +8,6 @@ import org.json.JSONObject;
  */
 public interface IReceiver {
 
-    void onReceive(JSONObject json);
+    void onReceive(final JSONObject json) throws JSONException;
 
 }

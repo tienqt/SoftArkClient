@@ -1,5 +1,7 @@
 package no.group16.softark.tdt4240.softarkclient;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
@@ -17,21 +19,29 @@ import java.util.Queue;
 public abstract class ServerHandler   {
     LinkedList<JSONObject> outgoingMessageQueue;
     LinkedList<JSONObject> incomingMessageQueue;
+    SenderTask senderTask;
+    ReceiverTask receiverTask;
 
     HashMap<String, ArrayList<IReceiver>> listenerMap;
 
     public ServerHandler() {
+        listenerMap = new HashMap<>();
         outgoingMessageQueue = new LinkedList<>();
         incomingMessageQueue = new LinkedList<>();
-        new SenderTask().execute();
-        new ReceiverTask().execute();
+
+        senderTask = new SenderTask();
+        receiverTask = new ReceiverTask();
+
+        senderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        receiverTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    void registerListener(String eventKey, IReceiver receiver) {
+    public void registerListener(String eventKey, IReceiver receiver) {
         ArrayList classes;
         if(listenerMap.containsKey(eventKey)) {
             classes = listenerMap.get(eventKey);
-            classes.add(receiver);
+            if(!classes.contains(receiver.getClass()))
+                classes.add(receiver);
         } else {
             classes = new ArrayList();
             classes.add(receiver);
@@ -39,16 +49,29 @@ public abstract class ServerHandler   {
         }
     }
 
-    void removeListener(String eventKey, IReceiver receiver) {
+    public void removeListener(String eventKey, IReceiver receiver) {
         if(listenerMap.containsKey(eventKey)) {
             ArrayList classes = listenerMap.get(eventKey);
-
             if(classes.contains(receiver))
                 classes.remove(receiver);
         }
     }
 
-    private class SenderTask extends AsyncTask<Void, Void, Void> {
+
+    public void queueMessage(JSONObject json) {
+        outgoingMessageQueue.add(json);
+    }
+
+    protected void queueIncomingMessage(JSONObject json) {
+        incomingMessageQueue.add(json);
+    }
+
+    public Queue<JSONObject> getIncomingMessageQueue() {
+        return incomingMessageQueue;
+    }
+
+
+    protected class SenderTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -58,48 +81,75 @@ public abstract class ServerHandler   {
                 while(outgoingMessageQueue.isEmpty() == false) {
                     // TODO: dequeue outgoingMessageQueue and send to server
                     // serverConnection
-                    JSONObject obj = outgoingMessageQueue.remove();
-                    onMessageReadyToBeSent(obj);
+                    if(isConnected()) {
+                        JSONObject obj = outgoingMessageQueue.remove();
+                        onMessageReadyToBeSent(obj);
+                    }
                 }
-                // Sleep?
 
                 if(/*disconnectNow == true*/ false)
                     break;
-            }
 
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
             return null;
         }
     }
 
-    private class ReceiverTask extends AsyncTask<Void, Void, Void> {
+    protected class ReceiverTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            boolean stop = false;
-
-            while(!stop) {
+            while(true) {
                 while(incomingMessageQueue.isEmpty() == false) {
                     JSONObject obj = incomingMessageQueue.remove();
                     onIncomingMessageFromQueue(obj);
                 }
-            }
 
-            return null;
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
-
 
 
     /**
      * This function is called whenever a message is dequeued from incomingMessageQueue
      * @param json
      */
-    public void onIncomingMessageFromQueue(JSONObject json) {
+    protected void onIncomingMessageFromQueue(JSONObject json) {
         try {
+
             String type = json.getString("type");
-            for(IReceiver r : listenerMap.get(type)) {
-                r.onReceive(json);
+            if(listenerMap.containsKey(type)) {
+                for(IReceiver r : listenerMap.get(type)) {
+                    final IReceiver rec = r;
+                    final JSONObject jsonFinal = json;
+
+                    ((Activity)rec).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                rec.onReceive(jsonFinal);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+
+
+                }
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -109,6 +159,10 @@ public abstract class ServerHandler   {
      * This function is called whenever a message is dequeued from outgoingMessageQueue
      * @param json
      */
-    abstract public void onMessageReadyToBeSent(JSONObject json);
+    abstract protected void onMessageReadyToBeSent(JSONObject json);
+
+    abstract public Boolean isConnected();
+
+    abstract public void connect(String ip, int port);
 
 }

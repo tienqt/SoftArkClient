@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class GameActivity extends AppCompatActivity {
 
     Controller gameController;
@@ -15,7 +18,7 @@ public class GameActivity extends AppCompatActivity {
         hideSystemStatusBar();
 
         gameController = new GameController(this);
-        gameController.startNewWord("pannekake");
+        //gameController.startNewWord("pannekake");
 
         setContentView((GameView)gameController.getGameView());
     }
@@ -26,6 +29,7 @@ public class GameActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
         decorView.setSystemUiVisibility(uiOptions);
     }
+
 
     /**
      * MAYBE THIS SHOULD BE DONE ON THE SERVER INSTEAD, SO ALL USERS GET THE SAME?

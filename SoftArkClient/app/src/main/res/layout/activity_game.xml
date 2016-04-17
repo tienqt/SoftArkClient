@@ -23,7 +23,7 @@
             android:layout_alignParentTop="true"
             android:layout_above="@+id/relativeLayout">
 
-            <SurfaceView
+            <no.group16.softark.tdt4240.softarkclient.CanvasRenderer
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/surfaceView"

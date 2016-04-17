@@ -1,7 +1,6 @@
 package no.group16.softark.tdt4240.softarkclient;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.text.Html;
 import android.widget.ImageButton;
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * Created by tien on 4/15/2016.
  */
-public class GameView extends RelativeLayout implements IView {
+public class GameView extends RelativeLayout implements IGameView {
 
     IRenderer renderer;
 
@@ -36,9 +35,7 @@ public class GameView extends RelativeLayout implements IView {
 
         playerListTextView = (TextView)findViewById(R.id.playersTextView);
 
-        updatePlayerList(/*TODO: pass JSON or something?*/);    // TODO: server should trigger this
-
-        renderer = new CanvasRenderer();
+        renderer = new CanvasRenderer(context);
     }
 
 
@@ -72,6 +69,11 @@ public class GameView extends RelativeLayout implements IView {
     }
 
     @Override
+    public void setWhoIsDrawing(String playerName) {
+
+    }
+
+    @Override
     public void moveLetterBtn(android.view.View v, final int MAX_CHAR_PER_ROW){
         ImageButton btn = (ImageButton)v;
 
@@ -92,7 +94,7 @@ public class GameView extends RelativeLayout implements IView {
     /**
      * Updates the list showing active players/teams and their scores
      */
-    private void updatePlayerList(/*TODO: pass JSON or something?*/) {
+    private void updateScoreList(String player) {
         playerListTextView.setText(Html.fromHtml(
                 "Even (2300)<br>" +
                         "Viktor (2200)<br>" +
@@ -139,4 +141,14 @@ public class GameView extends RelativeLayout implements IView {
     }
 
     // TODO: create add actionlistner method for controller
+
+
+    @Override
+    public IRenderer getRenderer() {
+        return renderer;
+    }
+
+    public void updatePlayerListTextView(String txt){
+        this.playerListTextView.setText(txt);
+    }
 }

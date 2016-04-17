@@ -1,6 +1,7 @@
 package no.group16.softark.tdt4240.softarkclient;
 
 import android.graphics.Path;
+import android.graphics.Point;
 import android.text.BoringLayout;
 import android.widget.ImageButton;
 
@@ -14,19 +15,6 @@ import java.util.Map;
  * Created by tien on 4/15/2016.
  */
 public class GameLogic extends Logic {
-
-    public class DrawingPath extends Path {
-        String drawingToolId;
-
-        public DrawingPath(String drawingToolId) {
-            this.drawingToolId = drawingToolId;
-        }
-
-        public String getDrawingToolId() {
-            return drawingToolId;
-        }
-
-    }
 
     ArrayList<DrawingPath> paths;
     HashMap<String, Integer> players;
@@ -42,6 +30,7 @@ public class GameLogic extends Logic {
     Boolean myTurnToDraw;
     String whoIsDrawing;
 
+    String playerList;
 
 
     public GameLogic(){
@@ -51,6 +40,7 @@ public class GameLogic extends Logic {
         drawingTools = new HashMap<String, DrawingTool>();
         drawingTools.put(Pencil.id, new Pencil());
         drawingTools.put(Eraser.id, new Eraser());
+        playerList = "";
     }
 
     public void updatePlayerList(JSONObject data) {
@@ -123,5 +113,25 @@ public class GameLogic extends Logic {
 
     public void setAvailableCharacters(String characters) {
         this.availableCharacters = characters;
+    }
+
+
+
+    public String getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(String playerList) {
+        this.playerList = playerList;
+    }
+
+    @Override
+    public void newWord(String keyboard, String drawer) {
+        this.paths.clear();
+    }
+
+    @Override
+    public void addPath(DrawingPath path) {
+        this.paths.add(path);
     }
 }

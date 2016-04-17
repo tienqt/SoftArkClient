@@ -3,16 +3,26 @@
 
     <!-- Menu activity -->
     <string name="gamecode_hint">Game code</string>
-    <string name="joingame_btntxt">Join game</string>
-    <string name="createGame_btntxt">Create game</string>
+    <string name="findgame_btntxt">Find game</string>
+    <string name="createGame_btntxt">Create a game</string>
 
     <!-- Join game activity -->
     <string name="enteryourname_hint">Enter your name</string>
     <string name="enteringgameby_lbltxt">Entering game by </string>
     <string name="start_btntxt">Start</string>
+    <string name="join_btntxt">Join</string>
 
     <!-- Create game activity -->
+    <string name="wordlist_hint">Enter your name</string>
+    <string name="creategame_lbltxt">Create a game</string>
+    <string name="selcategory_lbltxt">Select a category of words</string>
+    <string name="done_btntxt">Done</string>
 
+    <!-- Lobby activity -->
+    <string name="gamepin_lbltxt">Game</string>
+    <string name="waiting_lbltxt">Waiting for players to join...</string>
+    <string name="startgame_btntxt">Start the game!</string>
+    <string name="gameowner_lbltxt">Joining game by player</string>
 
     <!-- Game activity -->
     <string name="wordguess_hint">Word</string>
@@ -20,11 +30,17 @@
     <string name="category_lbltxt">Current list of words:</string>
     <string name="timeleft_lbltxt">Time left:</string>
 
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!-- Dialogs / messages -->
+    <string name="connecting">Connecting to server...</string>
+    <string name="pleasewait">Please wait</string>
+    <string name="roomisfull">Game is full!</string>
+    <string name="roomnotfound">Game not found!</string>
+    <string name="inappropriate">You dirty bastard...</string>
+    <string name="notconnected">Error: Not connected to server</string>
 
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="title_activity_game2">GameActivity2</string>
+
 
 
 </resources>
