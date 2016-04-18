@@ -19,7 +19,6 @@
             android:layout_alignParentStart="true"
             android:layout_toLeftOf="@+id/relativeLayout2"
             android:layout_toStartOf="@+id/relativeLayout2"
-            android:background="#00ff58"
             android:layout_alignParentTop="true"
             android:layout_above="@+id/relativeLayout">
 
@@ -28,8 +27,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/surfaceView"
                 android:layout_centerHorizontal="true"
-                android:padding="0dp"
-                android:background="#ffffff" />
+                android:padding="0dp" />
 
             <TableLayout
                 android:layout_width="match_parent"

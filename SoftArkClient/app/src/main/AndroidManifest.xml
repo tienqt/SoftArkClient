@@ -10,11 +10,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".MenuActivity" android:fitsSystemWindows="true"  android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".CreateGameActivity" android:fitsSystemWindows="true"  android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".LobbyActivity" android:screenOrientation="landscape" />
@@ -22,7 +18,12 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustResize"
             android:name=".GameActivity"
-             />
+             >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter></activity>
     </application>
 
 </manifest>

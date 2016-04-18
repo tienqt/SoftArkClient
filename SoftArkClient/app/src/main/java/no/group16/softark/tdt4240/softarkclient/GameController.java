@@ -151,7 +151,7 @@ public class GameController extends Controller implements IReceiver {
     protected void handleNewPathByUser(DrawingPath drawingPath) {
         gameLogic.addPath(drawingPath);
         gameView.getRenderer().onUpdate();
-        //gameView.getRenderer().onRender();
+        gameView.getRenderer().onRender();
 
         JSONArray jsonPoints = new JSONArray();
         for(int i = 0; i < drawingPath.points.size(); i++) {

@@ -37,15 +37,9 @@ public class CanvasRenderer implements IRenderer {
     @Override
     public void onRender() {
         Canvas canvas = surfaceView.getHolder().lockCanvas();
+        canvas.drawColor(Color.WHITE);
 
-        paint.setDither(true);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(3);
-
-        /*for(DrawingPath drawingPath : drawingPaths) {
+        for(DrawingPath drawingPath : drawingPaths) {
             Path path = new Path();
 
             for(int i = 0; i < drawingPath.points.size(); i++) {
@@ -60,9 +54,6 @@ public class CanvasRenderer implements IRenderer {
 
             canvas.drawPath(path, paint);
         }
-        surfaceView.getHolder().unlockCanvasAndPost(canvas);*/
-
-        canvas.drawRect(50, 50, 200, 200, paint);
         surfaceView.getHolder().unlockCanvasAndPost(canvas);
     }
 

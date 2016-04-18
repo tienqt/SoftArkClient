@@ -1,5 +1,6 @@
 package no.group16.softark.tdt4240.softarkclient;
 
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.view.View;
 
