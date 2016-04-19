@@ -1,11 +1,6 @@
 package no.group16.softark.tdt4240.softarkclient;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -14,19 +9,17 @@ import com.esotericsoftware.kryonet.Listener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Queue;
 
-import javax.xml.datatype.Duration;
 
 /**
  * Created by tien on 4/14/2016.
+ */
+
+/**
+ * Info:
+ * We set up a very barebone server to test the communication. For sending/receiving we just used
+ * the String class ( kryo.register(String.class) ) and sent JSON objects as String objects.
  */
 public class KyroNetServerHandler extends ServerHandler {
     Client client = new Client();

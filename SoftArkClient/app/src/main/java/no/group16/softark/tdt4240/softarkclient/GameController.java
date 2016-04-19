@@ -27,62 +27,12 @@ public class GameController extends Controller implements IReceiver {
     public GameController(Context context){
         super(context);
 
-        GameManager.getInstance().getServerHandler().registerListener("newWord", this);
-
-
-        /*gameView.getRenderer().setTouchEventListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int x = (int)event.getX();
-                int y = (int)event.getY();
-
-                ArrayList<Point> tmpPath = new ArrayList<Point>();
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        tmpPath.clear();
-                        tmpPath.add(new Point(x, y));
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        tmpPath.add(new Point(x, y));
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        DrawingPath dp = new DrawingPath(tmpPath, "", ""); //TODO
-                        handleNewPathByUser(dp);
-
-                        tmpPath.clear();
-                        break;
-                }
-                return true;
-            }
-        });*/
-
+        GameManager.getInstance().getServerHandler().registerListener("newKeyboard", this);
         GameManager.getInstance().getServerHandler().registerListener("newWord", this);
         GameManager.getInstance().getServerHandler().registerListener("checkAnswerResponse", this);
         GameManager.getInstance().getServerHandler().registerListener("gameOverNotification", this);
         GameManager.getInstance().getServerHandler().registerListener("newPathDrawn", this);
 
-        /*
-        gameView.getRenderer().setTouchEventListener(new TouchInputEvent() {
-            @Override
-            public void onTouchInputEvent(Point point, int action) {
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:       // TODO: create generic "types"
-                        tmpPath.clear();
-                        tmpPath.add(point);
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        tmpPath.add(point);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        DrawingPath dp = new DrawingPath(tmpPath, "", ""); //TODO
-                        handleNewPathByUser(dp);
-
-                        tmpPath.clear();
-                        break;
-                }
-            }
-        });*/
     }
 
 
@@ -114,12 +64,20 @@ public class GameController extends Controller implements IReceiver {
             }
         });
 
-        gameView.getRenderer().onRender();  // just to clear it
+
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("type", "readyToStartGame");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        GameManager.getInstance().getServerHandler().queueMessage(msg);
+
     }
 
     @Override
-    public void handleStartNewWord(JSONObject json) throws JSONException {
-        String newWord = json.getString("word");
+    public void handleNewKeyboard(JSONObject json) throws JSONException {
+        String newWord = json.getString("keyboard");
         String drawer = json.getString("drawer");
         gameLogic.newWord(newWord, drawer);
 
@@ -127,6 +85,15 @@ public class GameController extends Controller implements IReceiver {
             @Override
             public void onClick(View v) {
                 gameView.moveLetterBtn(v, gameLogic.getMAX_LETTERS_PER_ROW());
+
+                JSONObject msg = new JSONObject();
+                try {
+                    msg.put("type", "checkAnswerRequest");
+                    msg.put("word", gameView.getEntredWord());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                GameManager.getInstance().getServerHandler().queueMessage(msg);
             }
         });
     }
@@ -193,8 +160,11 @@ public class GameController extends Controller implements IReceiver {
     public void onReceive(JSONObject json) throws JSONException {
         String type = json.getString("type");
 
-        if(type.equals("newWord")) {
-            handleStartNewWord(json);
+        if(type.equals("newKeyboard")) {
+            handleNewKeyboard(json);
+
+        } if(type.equals("newWord")) {
+            handleNewKeyboard(json);
 
         } else if(type.equals("gameOverNotification")) {
 

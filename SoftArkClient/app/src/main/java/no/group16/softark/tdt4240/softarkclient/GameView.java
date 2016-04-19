@@ -1,6 +1,8 @@
 package no.group16.softark.tdt4240.softarkclient;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.Html;
 import android.view.SurfaceView;
@@ -124,27 +126,6 @@ public class GameView extends RelativeLayout implements IGameView {
         return output.toString();
     }
 
-    /**
-     * MAYBE DO THIS ON THE SERVER INSTEAD?
-     * Checks if the user have guessed the correct word by looking at the entered characters
-     * @param correctWord The correct word
-     * @return true if answer matches correctWord
-     */
-    private boolean checkAnswer(String correctWord) {
-
-        String typedWord = "";
-/*
-        for (int i = 0; i < enteredLettersRow.getChildCount(); i++) {
-            ImageButton btn = (ImageButton)enteredLettersRow.getChildAt(i);
-            typedWord += btn.getTag();
-        }
-*/
-        return typedWord.equals(correctWord);
-    }
-
-    // TODO: create add actionlistner method for controller
-
-
     @Override
     public IRenderer getRenderer() {
         return renderer;
@@ -157,6 +138,23 @@ public class GameView extends RelativeLayout implements IGameView {
     @Override
     public void setDrawListener(OnTouchListener touchListener) {
         renderer.setDrawerListener(touchListener);
+    }
+
+    @Override
+    public void handleNewWordToDraw(String newWord) {
+
+    }
+
+    @Override
+    public String getEntredWord() {
+        String typedWord = "";
+
+        for (int i = 0; i < enteredLettersRow.getChildCount(); i++) {
+            ImageButton btn = (ImageButton)enteredLettersRow.getChildAt(i);
+            typedWord += btn.getTag();
+        }
+
+        return typedWord;
     }
 
 

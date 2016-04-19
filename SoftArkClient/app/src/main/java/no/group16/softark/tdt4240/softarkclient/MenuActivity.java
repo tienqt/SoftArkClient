@@ -56,7 +56,7 @@ public class MenuActivity extends AppCompatActivity implements IReceiver {
                     JSONObject obj = new JSONObject();
                     try {
                         obj.put("type", "joinLobbyRequest");
-                        obj.put("gamePin", gameCodeTxt.getText());
+                        obj.put("gamePin", gameCodeTxt.getText().toString());
                         GameManager.getInstance().getServerHandler().queueMessage(obj);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -95,7 +95,6 @@ public class MenuActivity extends AppCompatActivity implements IReceiver {
         super.onDestroy();
     }
 
-
     @Override
     public void onReceive(final JSONObject json) throws JSONException {
         String type = json.getString("type");
@@ -120,7 +119,7 @@ public class MenuActivity extends AppCompatActivity implements IReceiver {
 
             if(result.equals("accepted")) {
                 Intent intent = new Intent(context, LobbyActivity.class);
-                intent.putExtra("gamePin", gameCodeTxt.getText());
+                intent.putExtra("gamePin", gameCodeTxt.getText().toString());
                 intent.putExtra("gameOwner", json.getString("gameOwner"));
                 startActivity(intent);
             } else if (result.equals("full")) {
@@ -145,7 +144,6 @@ public class MenuActivity extends AppCompatActivity implements IReceiver {
                 progress.dismiss();
 
         }
-
 
     }
 

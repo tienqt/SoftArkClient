@@ -12,4 +12,6 @@ public interface IGameView {
     public IRenderer getRenderer();
     public void updatePlayerListTextView(String txt);
     public void setDrawListener(View.OnTouchListener touchListener);
+    public void handleNewWordToDraw(String newWord);
+    public String getEntredWord();
 }

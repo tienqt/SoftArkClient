@@ -25,7 +25,7 @@ public abstract class Controller {
 
     }
 
-    abstract protected void handleStartNewWord(JSONObject json) throws JSONException;
+    abstract protected void handleNewKeyboard(JSONObject json) throws JSONException;
 
     abstract protected void handleNewPathByServer(JSONObject json) throws JSONException;
 
