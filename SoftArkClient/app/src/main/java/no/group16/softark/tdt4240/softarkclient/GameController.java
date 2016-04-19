@@ -20,7 +20,9 @@ import java.util.ArrayList;
  */
 public class GameController extends Controller implements IReceiver {
 
-    ArrayList<Point> tmpPath = new ArrayList<Point>();
+    ArrayList<Point> tmpPoints = new ArrayList<Point>();
+    DrawingPath tmpPath;
+    int tmpPathIndex = -1;
 
     public GameController(Context context){
         super(context);
@@ -92,22 +94,27 @@ public class GameController extends Controller implements IReceiver {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:       // TODO: create generic "types"
-                        tmpPath.clear();
-                        tmpPath.add(new Point((int)event.getX(), (int)event.getY()));
+                        tmpPath = new DrawingPath(new ArrayList<Point>(), "", ""); //TODO
+                        tmpPath.points.add(new Point((int)event.getX(), (int)event.getY()));
+                        tmpPathIndex = gameLogic.getPaths().size()-1;
+                        handleTemporaryPathByUser(tmpPath);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        tmpPath.add(new Point((int)event.getX(), (int)event.getY()));
+                        tmpPath.points.add(new Point((int)event.getX(), (int)event.getY()));
+                        //tmpPathIndex = gameLogic.getPaths().size() -1;
+                        handleTemporaryPathByUser(tmpPath);
                         break;
                     case MotionEvent.ACTION_UP:
-                        DrawingPath dp = new DrawingPath(tmpPath, "", ""); //TODO
-                        handleNewPathByUser(dp);
-
-                        tmpPath.clear();
+                        tmpPath.points.add(new Point((int)event.getX(), (int)event.getY()));
+                        handleNewPathByUser(tmpPath);
+                        tmpPathIndex = -1;
                         break;
                 }
                 return true;
             }
         });
+
+        gameView.getRenderer().onRender();  // just to clear it
     }
 
     @Override
@@ -132,37 +139,26 @@ public class GameController extends Controller implements IReceiver {
             JSONArray points = json.getJSONArray("points");
             ArrayList<Point> pointList = new ArrayList<>();
 
-            for(int i = 0; i < points.length(); i++) {
-                int x = ((JSONObject)points.get(i)).getInt("x");
-                int y = ((JSONObject)points.get(i)).getInt("y");
+            for(int i = 0; i < points.length(); i+=2) {
+                int x = ((Integer) points.get(i));
+                int y = ((Integer)points.get(i+1));
                 pointList.add(new Point(x, y));
             }
 
             DrawingPath drawingPath = new DrawingPath(pointList, "", "");
             gameLogic.addPath(drawingPath);
-
-            gameView.getRenderer().addPath(drawingPath);
-            gameView.getRenderer().onUpdate();
+            gameView.getRenderer().onUpdate(gameLogic.getPaths());
             gameView.getRenderer().onRender();
 
     }
 
     @Override
     protected void handleNewPathByUser(DrawingPath drawingPath) {
-        gameLogic.addPath(drawingPath);
-        gameView.getRenderer().onUpdate();
-        gameView.getRenderer().onRender();
-
         JSONArray jsonPoints = new JSONArray();
         for(int i = 0; i < drawingPath.points.size(); i++) {
-            JSONObject pt = new JSONObject();
-            try {
-                pt.put("x", drawingPath.points.get(i).x);
-                pt.put("y", drawingPath.points.get(i).y);
-                jsonPoints.put(pt);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            //JSONObject pt = new JSONObject();
+            jsonPoints.put(drawingPath.points.get(i).x);
+            jsonPoints.put(drawingPath.points.get(i).y);
         }
 
         JSONObject msg = new JSONObject();
@@ -176,6 +172,21 @@ public class GameController extends Controller implements IReceiver {
         }
 
         GameManager.getInstance().getServerHandler().queueMessage(msg);
+
+        gameLogic.addPath(drawingPath);              // TODO: Check that it's not alrady added (tmpPath)
+        gameView.getRenderer().onUpdate(gameLogic.getPaths());
+        gameView.getRenderer().onRender();
+
+    }
+
+    @Override
+    protected void handleTemporaryPathByUser(DrawingPath drawingPath) {
+        if(tmpPathIndex != -1)
+            gameLogic.getPaths().set(tmpPathIndex, drawingPath);
+
+
+        gameView.getRenderer().onUpdate(gameLogic.getPaths());
+        gameView.getRenderer().onRender();
     }
 
     @Override

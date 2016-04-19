@@ -20,41 +20,47 @@ import java.util.concurrent.Callable;
  */
 public class CanvasRenderer implements IRenderer {
 
-    private ArrayList<DrawingPath> drawingPaths = new ArrayList<DrawingPath>();
+    private ArrayList<DrawingPath> drawingPaths;// = new ArrayList<DrawingPath>();
     private Paint paint = new Paint();
     SurfaceView surfaceView;
 
     public CanvasRenderer(View context) {
         this.surfaceView = (SurfaceView)(context).findViewById(R.id.surfaceView);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(2);
     }
 
     @Override
-    public void onUpdate() {
-
+    public void onUpdate(ArrayList<DrawingPath> paths) {
+        drawingPaths = paths;
     }
 
 
     @Override
     public void onRender() {
         Canvas canvas = surfaceView.getHolder().lockCanvas();
-        canvas.drawColor(Color.WHITE);
 
-        for(DrawingPath drawingPath : drawingPaths) {
-            Path path = new Path();
+        if(canvas != null) {
+            canvas.drawColor(Color.WHITE);
 
-            for(int i = 0; i < drawingPath.points.size(); i++) {
-                int x = drawingPath.points.get(i).x;
-                int y = drawingPath.points.get(i).y;
+            for(DrawingPath drawingPath : drawingPaths) {
+                Path path = new Path();
 
-                if(i == 0)
-                    path.moveTo(x, y);
-                else
-                    path.lineTo(x, y);
+                for(int i = 0; i < drawingPath.points.size(); i++) {
+                    int x = drawingPath.points.get(i).x;
+                    int y = drawingPath.points.get(i).y;
+
+                    if(i == 0)
+                        path.moveTo(x, y);
+                    else
+                        path.lineTo(x, y);
+                }
+
+                canvas.drawPath(path, paint);
             }
-
-            canvas.drawPath(path, paint);
+            surfaceView.getHolder().unlockCanvasAndPost(canvas);
         }
-        surfaceView.getHolder().unlockCanvasAndPost(canvas);
+
     }
 
     @Override
@@ -62,9 +68,5 @@ public class CanvasRenderer implements IRenderer {
         surfaceView.setOnTouchListener(listener);
     }
 
-    @Override
-    public void addPath(DrawingPath drawingPath) {
-        drawingPaths.add(drawingPath);
-    }
 
 }

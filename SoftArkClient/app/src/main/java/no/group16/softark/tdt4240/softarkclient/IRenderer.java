@@ -11,9 +11,7 @@ import java.util.concurrent.Callable;
  * Created by tien on 4/14/2016.
  */
 public interface IRenderer {
-    public void onUpdate();
+    public void onUpdate(ArrayList<DrawingPath> paths);
     public void onRender();
     public void setDrawerListener(View.OnTouchListener listener);
-    public void addPath(DrawingPath drawingPath);
-
 }

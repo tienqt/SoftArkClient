@@ -27,4 +27,6 @@ public abstract class Logic {
     abstract public void setPlayerList(String playerList);
 
     abstract public void newWord(String keyboard, String drawer);
+
+    abstract ArrayList<DrawingPath> getPaths();
 }

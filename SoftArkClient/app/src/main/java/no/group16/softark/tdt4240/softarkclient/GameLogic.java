@@ -131,6 +131,11 @@ public class GameLogic extends Logic {
     }
 
     @Override
+    ArrayList<DrawingPath> getPaths() {
+        return paths;
+    }
+
+    @Override
     public void addPath(DrawingPath path) {
         this.paths.add(path);
     }

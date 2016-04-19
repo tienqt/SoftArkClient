@@ -31,6 +31,8 @@ public abstract class Controller {
 
     abstract protected void handleNewPathByUser(DrawingPath drawingPath);
 
+    abstract protected void handleTemporaryPathByUser(DrawingPath drawingPath);
+
     public Logic getGameLogic() {
         return gameLogic;
     }
